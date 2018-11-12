@@ -78,7 +78,7 @@ class Post{
     $str.= "<p>".htmlentities($this->text)."</p></div>";   
     $str.= "\n\n<div class='comments'><h3>Comments: </h3>\n<ul>";
     foreach ($this->get_comments() as $comment) {
-      $str.= "\n\t<li>".$comment->text."</li>";
+      $str.= "\n\t<li>".htmlentities($comment->text)."</li>";
     }
     $str.= "\n</ul></div>";
     return $str;
