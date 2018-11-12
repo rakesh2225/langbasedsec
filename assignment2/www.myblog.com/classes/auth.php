@@ -1,4 +1,5 @@
 <?php
+  session_set_cookie_params(60*15, "/", "rakeshsv.myblog.com", TRUE, TRUE);
   session_start();
   require('../classes/db.php'); 
   require('../classes/user.php'); 
