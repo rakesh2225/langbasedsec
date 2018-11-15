@@ -2,6 +2,8 @@
   $site = "PentesterLab vulnerable blog";
   require "header.php";
   $post = Post::find(intval($_GET['id']));
+  $rand = bin2hex(openssl_random_pseudo_bytes(16));
+  $_SESSION["nocsrftoken"] = $rand;
 ?>
   <div class="block" id="block-text">
     <div class="secondary-navigation">
@@ -16,6 +18,7 @@
         Author: <input type="text" name="author" / ><br/>
         Text: <textarea name="text" cols="80" rows="5">
         </textarea><br/>
+    <input type="hidden" name="nocsrftoken" value="<?php echo $rand?>" />
         <input type="submit" name="submit" / >
       </form> 
     </div>

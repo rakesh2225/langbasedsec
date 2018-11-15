@@ -6,9 +6,17 @@
   require("../classes/post.php");
   require("../classes/comment.php");
 
-   if(isset($_POST['title'])){
+   if(isset($_POST['title'])) {
+      $nocsrftoken = $_POST["nocsrftoken"];
+      if (!isset($nocsrftoken) or ($nocsrftoken != $_SESSION['nocsrftoken'])) {
+        echo "Cross-site request forgery is detected!"; die();
+      }
       Post::create();
    }
+
+  $rand = bin2hex(openssl_random_pseudo_bytes(16));
+  $_SESSION["deleteToken"] = $rand;
+
 ?>
 
 <div style="padding-left: 300px;">
@@ -22,7 +30,7 @@
     echo "<tr>";
     echo "<td><a href=\"../post.php?id=".h($post->id)."\">".h($post->title)."</a></td>";
     echo "<td><a href=\"edit.php?id=".h($post->id)."\">edit</a></td>";
-    echo "<td><a href=\"del.php?id=".h($post->id)."\">delete</a></td>";
+    echo "<td><a href=\"del.php?id=".h($post->id)."&deleteToken=$rand\">delete</a></td>";
     echo "</tr>";
   }
 ?>
