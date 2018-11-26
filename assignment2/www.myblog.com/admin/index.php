@@ -28,7 +28,7 @@
 
   foreach ($posts as $post) {
     echo "<tr>";
-    echo "<td><a href=\"../post.php?id=".h($post->id)."\">".h($post->title)."</a></td>";
+    echo "<td><a href=\"../post.php?id=".h($post->id)."\">".h(htmlentities($post->title))."</a></td>";
     echo "<td><a href=\"edit.php?id=".h($post->id)."\">edit</a></td>";
     echo "<td><a href=\"del.php?id=".h($post->id)."&deleteToken=$rand\">delete</a></td>";
     echo "</tr>";

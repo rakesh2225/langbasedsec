@@ -13,7 +13,7 @@
     $post->update($_POST['title'], $_POST['text']);
   } 
   
-  $rand = bin2hex(openssl_random_pseudo_bytes());
+  $rand = bin2hex(openssl_random_pseudo_bytes(16));
   $_SESSION["nocsrftoken"] = $rand;
   
 ?>

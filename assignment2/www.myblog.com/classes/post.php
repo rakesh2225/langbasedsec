@@ -43,7 +43,7 @@ class Post{
     echo "</ul>\n";
   }
  function render_edit() {
-    $str = "<img src=\"uploads/".h($this->img)."\" alt=\"".h($this->title)."\" />";
+    $str = "<img src=\"uploads/".h($this->img)."\" alt=\"".h(htmlentities($this->title))."\" />";
     return $str;
   } 
   
@@ -52,7 +52,7 @@ class Post{
     $str = "<h2 class=\"title\"><a href=\"/post.php?id=".h($this->id)."\">".h($this->title)."</a></h2>";
     $str.= '<div class="inner" align="center">';
     $str.= "<p>".htmlentities($this->text)."</p></div>";   
-    $str.= "<p><a href=\"/post.php?id=".h($this->id)."\">";
+    $str.= "<p><a href=\"/post.php?id=".h(htmlentities($this->id))."\">";
     $count = $this->get_comments_count();
     switch ($count) {
     case 0:
