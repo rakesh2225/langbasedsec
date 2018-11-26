@@ -112,11 +112,24 @@ class Post{
  
   function find($id) {
     global $dblink;
+    $prepared_sql = "SELECT id, title, text, published from posts where id=?";
+    $stmt = mysqli_prepare($dblink, $prepared_sql);
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $id, $title, $text, $published);
+    if (mysqli_stmt_fetch($stmt)) {
+      echo "DEBUG> $id, $title, $text, $published";
+      $post = new Post($id, $title, $text, $published);
+    } else {
+      echo "DEBUG> SQL injection";
+    }
+    /*
     $result = mysqli_query($dblink, "SELECT * FROM posts where id=".$id);
     $row = mysqli_fetch_assoc($result); 
     if (isset($row)){
       $post = new Post($row['id'],$row['title'],$row['text'],$row['published']);
     }
+*/
     return $post;
   
   }
