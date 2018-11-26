@@ -14,7 +14,13 @@ class Post{
     global $dblink;
     $sql = "SELECT * FROM posts";
     if (isset($order)) 
-      $sql .= "order by ".mysqli_real_escape_string($dblink, $order);  
+      $sql .= "order by ".mysqli_real_escape_string($dblink, $order);
+    /* 
+    Although the user input is directly used here without validation, 
+    input is passed to mysqli_real_escape_string to escape the special characters.
+    Thus preventing SQL injection. This is still argued to be not safe when used without quotes.
+    Ref: https://stackoverflow.com/questions/5741187/sql-injection-that-gets-around-mysql-real-escape-string
+    */
     $results= mysqli_query($dblink, $sql);
     $posts = Array();
     if ($results) {
@@ -89,6 +95,10 @@ class Post{
     if (!preg_match('/^[0-9]+$/', $this->id)) {
       die("ERROR: INTEGER REQUIRED");
     }
+    /* 
+    The user input is pattern matched, hence there is no chances of SQL injection. 
+    Here prepared statement is not needed.
+    */
     $comments = Array();
     $result = mysqli_query($dblink, "SELECT count(*) as count FROM comments where post_id=".$this->id);
     $row = mysqli_fetch_assoc($result);
@@ -100,6 +110,10 @@ class Post{
     if (!preg_match('/^[0-9]+$/', $this->id)) {
       die("ERROR: INTEGER REQUIRED");
     }
+    /* 
+    The user input is pattern matched, hence there is no chances of SQL injection. 
+    Here prepared statement is not needed.
+    */
     $comments = Array();
     $results = mysqli_query($dblink, "SELECT * FROM comments where post_id=".$this->id);
     if (isset($results)){
@@ -138,6 +152,10 @@ class Post{
     if (!preg_match('/^[0-9]+$/', $id)) {
       die("ERROR: INTEGER REQUIRED");
     }
+    /* 
+    The user input is pattern matched, hence there is no chances of SQL injection. 
+    Here prepared statement is not needed.
+    */
     $result = mysqli_query($dblink, "DELETE FROM posts where id=".(int)$id);
   }
   
@@ -147,6 +165,10 @@ class Post{
       $sql .= mysqli_real_escape_string($dblink, $_POST["title"])."',text='";
       $sql .= mysqli_real_escape_string($dblink, $_POST["text"])."' WHERE id=";
       $sql .= intval($this->id);
+      /* 
+      The user input is used with intval and requires user input to be int, otherwise this query will fail.
+      Hence prepared statement is not needed.
+      */
       $result = mysqli_query($dblink,$sql);
       $this->title = $title; 
       $this->text = $text; 
@@ -157,6 +179,12 @@ class Post{
       $sql = "INSERT INTO posts (title, text) VALUES ('";
       $title = mysqli_real_escape_string($dblink, $_POST["title"]);
       $text = mysqli_real_escape_string($dblink, $_POST["text"]);
+      /* 
+      Although the user input is directly used here without validation, 
+      input is passed to mysqli_real_escape_string to escape the special characters.
+      Thus preventing SQL injection. This is still argued to be not safe when used without quotes.
+      Ref: https://stackoverflow.com/questions/5741187/sql-injection-that-gets-around-mysql-real-escape-string
+      */
       $sql .= $title."','".$text;
       $sql.= "')";
       $result = mysqli_query($dblink,$sql);
